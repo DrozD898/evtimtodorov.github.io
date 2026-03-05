@@ -259,110 +259,7 @@
       opacity: 0.98;
     }
 	
-	/* =========================
-   SUBTLE SCROLLING BRAND BAR
-========================= */
 
-.brands {
-  margin-top: 100px;
-  padding: 60px 0;
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-
-.brands-inner {
-  max-width: var(--max);
-  margin: 0 auto;
-  }
-
-.brands h2 {
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 40px;
-}
-
-
-.logo-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly; /* evenly distributes across full width */
-  gap: 40px; /* minimum spacing */
-}
-
-.logo-row img {
-  height: 100px;
-  width: auto;
-  object-fit: contain;
-
-  filter: grayscale(100%) brightness(1.1);
-  opacity: 0.45;
-
-  transition: 
-    filter 0.4s ease,
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.logo-row img:hover {
-  filter: grayscale(0%) brightness(1);
-  opacity: 1;
-  transform: translateY(-2px);
-}
-
-
-/* Logo styling */
-.logo-track img {
-  height: 75px;              /* uniform height */
-  width: auto;
-  object-fit: contain;
-  opacity: 0.5;              /* subtle */
-  filter: grayscale(0%) brightness(1.2);
-  transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-/* Quiet hover */
-.logo-track img:hover {
-  opacity: 0.9;
-}
-
-
-.brands {
-  margin-top: 100px;
-  padding: 70px 0;
-  position: relative;
-  justify-content: space-evenly;
-}
-
-/* Soft illuminated strip */
-.brands::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 140px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(200,200,255,0.08) 15%,
-    rgba(200,200,255,0.10) 50%,
-    rgba(200,200,255,0.08) 85%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 0;
-}
-
-.logo-marquee {
-  position: relative;
-  z-index: 1;
-}
-
-
-    }
   </style>
 </head>
 
@@ -552,23 +449,7 @@
       </a>
 	  
     </main>
-
-
-	<section class="brands">
-		<div class="brands-inner">
-		<div class="logo-row">
-		<img src="logos/logo1.png" alt="Brand 1">
-		<img src="logos/logo2.png" alt="Brand 2">
-		<img src="logos/logo3.png" alt="Brand 3">
-		<img src="logos/logo4.png" alt="Brand 4">
-		<img src="logos/logo5.png" alt="Brand 5">
-		<img src="logos/logo6.png" alt="Brand 6">
-		<img src="logos/logo7.png" alt="Brand 7">
-    </div>
-  </div>
-</section>
-
-
+	
     <footer>
       <div> </div>
       <div style="color: rgba(255,255,255,0.46);">
