@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Evtim Todorov — Editing Portfolio</title>
+  <meta name="color-scheme" content="dark" />
+  <style>
+    :root{
+      --bg: #0b0d12;
+      --panel: rgba(255,255,255,0.04);
+      --panel2: rgba(255,255,255,0.06);
+      --text: rgba(255,255,255,0.88);
+      --muted: rgba(255,255,255,0.62);
+      --muted2: rgba(255,255,255,0.45);
+      --border: rgba(255,255,255,0.10);
+      --shadow: 0 10px 40px rgba(0,0,0,0.45);
+      --radius: 18px;
+      --radius2: 14px;
+      --gap: 16px;
+      --max: 1500px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100vh; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(120,90,255,0.18), transparent 60%),
+        radial-gradient(900px 500px at 85% 10%, rgba(0,200,255,0.14), transparent 55%),
+        radial-gradient(700px 500px at 40% 110%, rgba(255,120,0,0.10), transparent 55%),
+		  background-repeat: no-repeat;
+        var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 44px 22px 60px; }
+
+    header{
+      display:flex;
+      gap: 18px;
+      align-items:flex-start;
+      justify-content: space-between;
+      margin-bottom: 26px;
+    }
+
+    .title h1{
+      margin:0;
+      font-size: clamp(28px, 4vw, 40px);
+      letter-spacing: -0.02em;
+      font-weight: 720;
+    }
+    .title p{
+      margin: 10px 0 0;
+      max-width: 90ch;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .chiprow{
+      margin-top: 14px;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .chip{
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.70);
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(10px);
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.86);
+      font-size: 13px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      user-select:none;
+      backdrop-filter: blur(10px);
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.18);
+    }
+    .btn small{ color: var(--muted2); font-size: 12px; }
+
+    .grid{
+      margin-top: 22px;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+    }
+
+    /* Card */
+    .card{
+      grid-column: span 4;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+      border: 1px solid var(--border);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+      position: relative;
+      min-height: 255px;
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.20);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    }
+
+    /* Thumbnail area */
+    .thumb{
+      aspect-ratio: 16 / 9;
+      width:100%;
+      background:
+        radial-gradient(120% 160% at 15% 20%, rgba(140,120,255,0.45), transparent 55%),
+        radial-gradient(120% 160% at 85% 35%, rgba(0,200,255,0.35), transparent 55%),
+        radial-gradient(120% 160% at 50% 110%, rgba(255,120,0,0.20), transparent 55%),
+        rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      display:flex;
+      align-items:flex-end;
+      padding: 14px;
+      position: relative;
+    }
+    .thumb::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, transparent 55%, rgba(0,0,0,0.45));
+      pointer-events:none;
+    }
+
+    .thumblabel{
+      position: relative;
+      z-index: 1;
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      color: rgba(255,255,255,0.84);
+      font-size: 12px;
+      letter-spacing: 0.02em;
+      background: rgba(0,0,0,0.35);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 6px 9px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+    }
+    .dot{ width:7px; height:7px; border-radius: 999px; background: rgba(255,255,255,0.75); opacity: .85; }
+
+    .body{
+      padding: 14px 14px 16px;
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .meta{
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .name{
+      font-weight: 650;
+      letter-spacing: -0.01em;
+      font-size: 14px;
+      margin:0;
+    }
+    .kind{
+      font-size: 12px;
+      color: var(--muted2);
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.10);
+      white-space: nowrap;
+    }
+    .desc{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .linkline{
+      margin-top: 2px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      color: rgba(255,255,255,0.70);
+      font-size: 12px;
+    }
+    .url{
+      overflow:hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 75%;
+      color: rgba(255,255,255,0.62);
+    }
+    .open{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      color: rgba(255,255,255,0.85);
+    }
+    .arrow{
+      width: 14px; height: 14px; opacity: .85;
+    }
+
+    footer{
+      margin-top: 26px;
+      color: rgba(255,255,255,0.52);
+      font-size: 12px;
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      header{ flex-direction: column; }
+      .actions{ justify-content: flex-start; }
+      .card{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      .card{ grid-column: span 12; }
+    }
+
+    /* If you later switch placeholders to real images */
+    .thumb img{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit: cover;
+      z-index:0;
+      opacity: 0.98;
+    }
+	
+	/* =========================
+   SUBTLE SCROLLING BRAND BAR
+========================= */
+
+.brands {
+  margin-top: 100px;
+  padding: 60px 0;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.brands-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  }
+
+.brands h2 {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 40px;
+}
+
+
+.logo-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly; /* evenly distributes across full width */
+  gap: 40px; /* minimum spacing */
+}
+
+.logo-row img {
+  height: 100px;
+  width: auto;
+  object-fit: contain;
+
+  filter: grayscale(100%) brightness(1.1);
+  opacity: 0.45;
+
+  transition: 
+    filter 0.4s ease,
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.logo-row img:hover {
+  filter: grayscale(0%) brightness(1);
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+
+/* Logo styling */
+.logo-track img {
+  height: 75px;              /* uniform height */
+  width: auto;
+  object-fit: contain;
+  opacity: 0.5;              /* subtle */
+  filter: grayscale(0%) brightness(1.2);
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+/* Quiet hover */
+.logo-track img:hover {
+  opacity: 0.9;
+}
+
+
+.brands {
+  margin-top: 100px;
+  padding: 70px 0;
+  position: relative;
+  justify-content: space-evenly;
+}
+
+/* Soft illuminated strip */
+.brands::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 140px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(200,200,255,0.08) 15%,
+    rgba(200,200,255,0.10) 50%,
+    rgba(200,200,255,0.08) 85%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.logo-marquee {
+  position: relative;
+  z-index: 1;
+}
+
+
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">
+        <h1>Evtim Todorov</h1>
+        <p>
+          Versatile video editor with a diverse background in broadcast commercials, television, web series, music videos,
+          feature films and more. Managing the workflow from set to screen, I bring experience in on-set data management,
+          professional color grading, and a comprehensive understanding of the entire VFX post-production pipeline.
+        </p>
+        <div class="chiprow">
+          <span class="chip">Video Editing</span>
+          <span class="chip">Commercials</span>
+          <span class="chip">TV / Web</span>
+          <span class="chip">Music Videos</span>
+          <span class="chip">Features</span>
+          <span class="chip">Color</span>
+          <span class="chip">VFX Pipeline</span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a class="btn" href="mailto:evtim.todorov@gmail.com" title="Email">
+          ✉️ <span>evtim.todorov@gmail.com</span>
+        </a>
+        <a class="btn" href="https://www.imdb.com/name/nm6334899/" target="_blank" rel="noopener noreferrer" title="IMDb">
+          🎬 <span>IMDb</span> <small>nm6334899</small>
+        </a>
+      </div>
+    </header>
+
+<br>
+
+    <main class="grid" id="grid">
+
+      <!-- CARD TEMPLATE NOTES:
+           - For now: placeholders only.
+           - Later: replace the thumb div content with:
+             <img src="thumbs/01.jpg" alt="Project thumbnail" loading="lazy" />
+           - Keep the rest the same.
+      -->
+
+      <a class="card" href="https://youtu.be/PR4QL9M7yF4" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/01.jpg" alt="Project 01 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> Evtim Todorov</div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">Evtim Todorov | Editing Showreel 2020</p>
+            <span class="kind">Showreel</span>
+          </div>
+          <p class="desc">Projects showcase</p>
+          <div class="linkline">
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://vimeo.com/338076847" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/02.jpg" alt="Project 02 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> Bubu Studio</div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">BUBU STUDIO | VFX SHOWREEL 2019</p>
+            <span class="kind">Showreel</span>
+          </div>
+          <p class="desc">Projects showcase while at Bubu Studio</p>
+          <div class="linkline">
+          </div>
+        </div>
+      </a>
+
+	  <a class="card" href="https://www.youtube.com/watch?v=a2BWEKy7W7s" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/03.jpg" alt="Project 03 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> All She Wrote</div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">All She Wrote TV Spot</p>
+            <span class="kind">Feature Film</span>
+          </div>
+          <p class="desc">Lead editor</p>
+          <div class="linkline">            
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://youtu.be/xDzz2N1zgWA?si=hCRJY_RcDP90KRU8" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/04.jpg" alt="Project 04 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> Lidl Bulgaria</div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">Печен чийзкейк 🍰 | Готви с Lidl | Lidl Bulgaria </p>
+            <span class="kind">Web Series</span>
+          </div>
+		  <p class="desc"><br> Web Series Edit, Grading, On-set data management</p>
+          <div class="linkline">            
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://youtube.com/shorts/oSSsqOlnKRw?si=9xIYrFr6u-gPSdQp" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/05.jpg" alt="Project 05 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> LIDL Bulgaria </div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">Печен чийзкейк 🍰 | Готви с Lidl Промо | Lidl Bulgaria</p>
+            <span class="kind">Web Series Short</span>
+          </div>
+  		  <p class="desc"><br>Youtube Short for promotional use</p>
+          <div class="linkline">            
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.youtube.com/watch?v=y7t6lD1bfQo" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+			<img src="thumbs/06.jpg" alt="Project 06 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> Kubeti</div>        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">Kubeti - Супервкусни за суперсили</p>
+            <span class="kind">TV Commercial</span>
+          </div>
+  		  <p class="desc"><br>Edit</p>
+          <div class="linkline">            
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://www.youtube.com/watch?v=Cvh5hqELLmo&list=RDCvh5hqELLmo&start_radio=1" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/07.jpg" alt="Project 07 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> BTR</div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">Б.Т.Р. feat Мариана Попова - Несбъдване</p>
+            <span class="kind">Music Video</span>
+          </div>
+          <p class="desc">Edit</p>
+          <div class="linkline">
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://youtu.be/C6tns6MXzWU" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/08.jpg" alt="Project 08 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> Social Campaign</div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">Born Ready</p>
+            <span class="kind">Social Web Campaign</span>
+          </div>
+          <p class="desc">Edit</p>
+          <div class="linkline">           
+          </div>
+        </div>
+      </a>
+
+      <a class="card" href="https://vimeo.com/338076732" target="_blank" rel="noopener noreferrer">
+        <div class="thumb">
+          <img src="thumbs/09.jpg" alt="Project 09 thumbnail" loading="lazy" />
+			<div class="thumblabel"><span class="dot"></span> Bubu Studio</div>
+        </div>
+        <div class="body">
+          <div class="meta">
+            <p class="name">BUBU STUDIO | PRODUCTION SHOWREEL 2019</p>
+            <span class="kind">Showreel</span>
+          </div>
+          <p class="desc">Projects showcase while at Bubu Studio</p>
+          <div class="linkline">
+          </div>
+        </div>
+      </a>
+	  
+    </main>
+
+
+	<section class="brands">
+		<div class="brands-inner">
+		<div class="logo-row">
+		<img src="logos/logo1.png" alt="Brand 1">
+		<img src="logos/logo2.png" alt="Brand 2">
+		<img src="logos/logo3.png" alt="Brand 3">
+		<img src="logos/logo4.png" alt="Brand 4">
+		<img src="logos/logo5.png" alt="Brand 5">
+		<img src="logos/logo6.png" alt="Brand 6">
+		<img src="logos/logo7.png" alt="Brand 7">
+    </div>
+  </div>
+</section>
+
+
+    <footer>
+      <div> </div>
+      <div style="color: rgba(255,255,255,0.46);">
+       © 2026 Evtim Todorov
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
